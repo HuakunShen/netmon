@@ -10,8 +10,4 @@ repository = "https://github.com/HuakunShen/netmon.git"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [[bin]]
 name = "netspeed"
-path = "src/bin/netspeed.rs"
-
-
-[dependencies]
-chrono = "0.4.37"
+path = "src/main.rs"
