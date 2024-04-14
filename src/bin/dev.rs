@@ -9,7 +9,8 @@ fn main() {
     // let mut buf = String::new();
     // let _ = reader.read_to_string(&mut buf);
     // println!("{}", buf);
-    print_net_speed("en6", None);
+    print_net_speed("", None);
+    // print_net_speed("en6", None);
     // print_net_speed("enp7s0", None);
 
 }
