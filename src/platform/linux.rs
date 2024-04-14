@@ -31,8 +31,7 @@ pub fn parse_netstat_output(output: &str) -> Vec<NetStatRow> {
                 let obytes = parts[9].parse().unwrap_or(0);
                 let colls = parts[14].parse().unwrap_or(0);
                 let drop = parts[4].parse().unwrap_or(0);
-                // let address = parts[3].to_string(); // todo
-                let mtu = parts[2].parse().unwrap_or(0); // todo
+                let mtu = parts[2].parse().unwrap_or(0);
                 Some(NetStatRow {
                     name,
                     ipkts,
