@@ -2,7 +2,13 @@
 name = "netspeed-rs"
 version = "0.1.0"
 edition = "2021"
+default-run = "netspeed"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "netspeed"
+path = "src/bin/netspeed.rs"
+
 
 [dependencies]
+chrono = "0.4.37"
