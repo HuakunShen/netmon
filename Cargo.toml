@@ -1,6 +1,6 @@
 [package]
 name = "netmon"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 default-run = "netspeed"
 description = "A simple CLI and library for network monitor, mainly network speed monitoring."
