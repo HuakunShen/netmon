@@ -10,7 +10,7 @@ pub struct NetStatRow {
     pub drop: u64,
     // collisions
     pub colls: u64,
-    pub address: String,
+    // pub address: String,
     // maximum transmission unit
     pub mtu: u64,
 }

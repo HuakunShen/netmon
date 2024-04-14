@@ -1,5 +1,6 @@
 use std::time::Duration;
 use crate::common::NetStatRow;
+use std::io::Error;
 
 /// Sample netstat -ibnd on MacOS
 /// Name       Mtu   Network       Address            Ipkts Ierrs     Ibytes    Opkts Oerrs     Obytes  Coll Drop
@@ -20,7 +21,7 @@ pub fn parse_netstat_output(output: &str) -> Vec<NetStatRow> {
                 let oerrs = parts[8].parse().unwrap_or(0);
                 let drop = parts[11].parse().unwrap_or(0);
                 let colls = parts[10].parse().unwrap_or(0);
-                let address = parts[3].to_string();
+                // let address = parts[3].to_string();
                 let mtu = parts[1].parse().unwrap_or(0);
                 Some(NetStatRow {
                     name,
@@ -32,7 +33,7 @@ pub fn parse_netstat_output(output: &str) -> Vec<NetStatRow> {
                     oerrs,
                     drop,
                     colls,
-                    address,
+                    // address,
                     mtu,
                 })
             } else {
@@ -44,7 +45,7 @@ pub fn parse_netstat_output(output: &str) -> Vec<NetStatRow> {
         .collect()  // Collect all matching interfaces into a Vec
 }
 
-pub fn get_current_netstat() -> Vec<NetStatRow> {
+pub fn get_current_netstat() -> Result<Vec<NetStatRow>, Error> {
     let output = std::process::Command::new("netstat")
         .arg("-ibnd")
         .output()
@@ -56,32 +57,11 @@ pub fn get_current_netstat() -> Vec<NetStatRow> {
     stats.sort_by(|a, b| a.name.cmp(&b.name));
     // remove duplicate by name
     stats.dedup_by(|a, b| a.name == b.name);
-    stats
+    Ok(stats)
 }
 
 
-pub fn get_current_netstat_by_iface(iface: &str) -> Option<NetStatRow> {
+pub fn get_current_netstat_by_iface(iface: &str) -> Result<Option<NetStatRow>, Error> {
     let stats = get_current_netstat();
     stats.into_iter().find(|stat| stat.name == iface)
-}
-
-pub fn print_net_speed(iface: &str, duration_secs: Option<u8>) {
-    let mut last_stats = NetStatRow::default();
-    let duration_secs = duration_secs.unwrap_or(1);
-    let duration = Duration::from_secs(duration_secs as u64);
-    loop {
-        let stats = get_current_netstat_by_iface(iface).unwrap();
-        if last_stats.name == "" {
-            last_stats = stats.clone();
-            continue;
-        }
-        let ibytes_diff = stats.ibytes - last_stats.ibytes;
-        let obytes_diff = stats.obytes - last_stats.obytes;
-        let in_mbps = (ibytes_diff as f32) / 1024.0 / 1024.0 / duration.as_secs_f32() / (duration_secs as f32);
-        let out_mbps = (obytes_diff as f32) / 1024.0 / 1024.0 / duration.as_secs_f32() / (duration_secs as f32);
-        // println keep 2 decimal places
-        println!("Name: {}, {:.2} MBps in, {:.2} MBps out", stats.name, in_mbps, out_mbps);
-        std::thread::sleep(duration); // Adjust the interval as needed
-        last_stats = stats.clone();
-    }
 }
