@@ -9,7 +9,7 @@ pub fn parse_netstat_output(output: &str) -> Vec<NetStatRow> {
     output.lines()
         .skip(1)  // Skip the header line
         .filter_map(|line| {
-            let mut parts: Vec<&str> = line.split_whitespace().collect();
+            let parts: Vec<&str> = line.split_whitespace().collect();
             if parts.len() == 12 {
                 let name = parts[0].to_string();
                 let ipkts = parts[4].parse().unwrap_or(0);

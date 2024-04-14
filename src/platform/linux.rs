@@ -1,8 +1,6 @@
 use crate::common::NetStatRow;
-use std::{
-    io::{BufRead, Error, Read},
-};
 use std::collections::HashMap;
+use std::io::{BufRead, Error, Read};
 
 /// Sample /proc/net/dev on Linux
 /// Inter-|   Receive                                                |  Transmit
@@ -87,4 +85,3 @@ pub fn get_current_netstat() -> Result<Vec<NetStatRow>, Error> {
     }
     Ok(stats)
 }
-
