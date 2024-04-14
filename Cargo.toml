@@ -1,13 +1,14 @@
 [package]
 name = "netmon"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 default-run = "netspeed"
 description = "A simple CLI and library for network monitor, mainly network speed monitoring."
 license = "MIT"
 repository = "https://github.com/HuakunShen/netmon.git"
 
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[[bin]]
-name = "netspeed"
-path = "src/main.rs"
+# [[bin]]
+# name = "netspeed"
+# path = "src/bin/netspeed.rs"
