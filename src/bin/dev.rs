@@ -1,5 +1,4 @@
-use netspeed_rs::platform::{*};
-use netspeed_rs::print_net_speed_by_iface;
+use netmon::print_net_speed_by_iface;
 
 fn main() {
     // print_net_speed("en6", None);
@@ -12,5 +11,4 @@ fn main() {
     print_net_speed_by_iface("", None);
     // print_net_speed("en6", None);
     // print_net_speed("enp7s0", None);
-
 }
