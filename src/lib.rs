@@ -1,10 +1,17 @@
+use std::io::Error;
 use common::NetStatRow;
 use std::time::Duration;
+use crate::platform::get_current_netstat;
 
-use crate::platform::get_current_netstat_by_iface;
 pub mod platform;
 pub mod common;
 
+
+pub fn get_current_netstat_by_iface(iface: &str) -> Result<Option<NetStatRow>, Error> {
+    let stats = get_current_netstat()?;
+    let found = stats.into_iter().find(|stat| &stat.name == iface);
+    Ok(found)
+}
 
 pub fn print_net_speed(iface: &str, duration_secs: Option<u8>) {
     let mut last_stats = NetStatRow::default();
@@ -26,3 +33,5 @@ pub fn print_net_speed(iface: &str, duration_secs: Option<u8>) {
         last_stats = stats.clone();
     }
 }
+
+

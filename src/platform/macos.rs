@@ -1,4 +1,3 @@
-use std::time::Duration;
 use crate::common::NetStatRow;
 use std::io::Error;
 
@@ -61,7 +60,3 @@ pub fn get_current_netstat() -> Result<Vec<NetStatRow>, Error> {
 }
 
 
-pub fn get_current_netstat_by_iface(iface: &str) -> Result<Option<NetStatRow>, Error> {
-    let stats = get_current_netstat();
-    stats.into_iter().find(|stat| stat.name == iface)
-}

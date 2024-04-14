@@ -88,8 +88,3 @@ pub fn get_current_netstat() -> Result<Vec<NetStatRow>, Error> {
     Ok(stats)
 }
 
-pub fn get_current_netstat_by_iface(iface: &str) -> Result<Option<NetStatRow>, Error> {
-    let stats = get_current_netstat()?;
-    let found = stats.into_iter().find(|stat| &stat.name == iface);
-    Ok(found)
-}
