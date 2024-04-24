@@ -23,3 +23,7 @@ netspeed
 
 - [x] Print most basic network speed in the terminal
 - [x] Can be used as a library
+- [ ] Get listening ports and their process names
+- [ ] Get network speed of a specific process
+- [ ] Get network speed of a specific port
+
