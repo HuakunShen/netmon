@@ -15,3 +15,7 @@ path = "src/bin/netspeed.rs"
 
 [dependencies]
 chrono = "0.4.37"
+serde = { version = "1.0.210", features = ["derive"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+procfs = "0.16.0"

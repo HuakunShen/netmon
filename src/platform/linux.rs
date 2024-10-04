@@ -1,6 +1,9 @@
-use crate::common::NetStatRow;
+use crate::common::{NetStatRow, ProcessBytes};
 use std::collections::HashMap;
+use std::fs;
+use std::io::Write;
 use std::io::{BufRead, Error, Read};
+use std::process::Command;
 
 /// Sample /proc/net/dev on Linux
 /// Inter-|   Receive                                                |  Transmit
@@ -84,4 +87,58 @@ pub fn get_current_netstat() -> Result<Vec<NetStatRow>, Error> {
         }
     }
     Ok(stats)
+}
+
+fn read_process_bytes(pid: i32) -> Result<ProcessBytes, Error> {
+    let path = format!("/proc/{}/net/dev", pid);
+    let contents = std::fs::read_to_string(path)?;
+
+    let mut bytes_sent = 0;
+    let mut bytes_received = 0;
+
+    // Parse the /proc/[pid]/net/dev file line by line
+    for line in contents.lines().skip(2) {
+        // Skip headers
+        let fields: Vec<&str> = line.split_whitespace().collect();
+        if fields.len() >= 10 {
+            bytes_received += fields[1].parse::<u64>().unwrap_or(0);
+            bytes_sent += fields[9].parse::<u64>().unwrap_or(0);
+        }
+    }
+
+    Ok(ProcessBytes {
+        pid,
+        process_name: None,
+        bytes_sent,
+        bytes_received,
+    })
+}
+
+pub fn get_all_process_netstat() -> Result<Vec<ProcessBytes>, Error> {
+    let mut processes = Vec::new();
+    for proc in procfs::process::all_processes().unwrap() {
+        if let Ok(process) = proc {
+            let pid = process.pid;
+            let name: Option<String> = process.stat().ok().map(|stat| stat.comm);
+
+            // Try to read network information from /proc/[pid]/net/dev
+            if let Ok(mut data) = read_process_bytes(pid) {
+                data.process_name = name;
+                processes.push(data);
+            }
+        }
+    }
+    Ok(processes)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_all_process_netstat() {
+        let processes = get_all_process_netstat().unwrap();
+        assert!(processes.len() > 0);
+        println!("{:#?}", processes);
+    }
 }

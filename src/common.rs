@@ -1,4 +1,6 @@
-#[derive(Debug, Default, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct NetStatRow {
     pub name: String,
     pub ipkts: u64,
@@ -15,4 +17,10 @@ pub struct NetStatRow {
     pub mtu: u64,
 }
 
-
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct ProcessBytes {
+    pub pid: i32,
+    pub process_name: Option<String>,
+    pub bytes_sent: u64,
+    pub bytes_received: u64,
+}
