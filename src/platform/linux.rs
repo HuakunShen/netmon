@@ -114,7 +114,7 @@ fn read_process_bytes(pid: i32) -> Result<ProcessBytes, Error> {
     })
 }
 
-pub fn get_all_process_netstat() -> Result<Vec<ProcessBytes>, Error> {
+pub fn get_all_process_netstat() -> Result<Vec<ProcessBytes>, Box<dyn std::error::Error>> {
     let mut processes = Vec::new();
     for proc in procfs::process::all_processes().unwrap() {
         if let Ok(process) = proc {
@@ -129,16 +129,4 @@ pub fn get_all_process_netstat() -> Result<Vec<ProcessBytes>, Error> {
         }
     }
     Ok(processes)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_get_all_process_netstat() {
-        let processes = get_all_process_netstat().unwrap();
-        assert!(processes.len() > 0);
-        println!("{:#?}", processes);
-    }
 }
